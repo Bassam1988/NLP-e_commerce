@@ -1,32 +1,31 @@
 from django.urls import path, include
 from rest_framework import routers
 
-
-from . import api
+from . import views
 
 router_sub_category = routers.DefaultRouter()
-router_sub_category.register(r'sub_category', api.SubCategoryViewSet, 'shop')
+router_sub_category.register(r'sub_category', views.SubCategoryViewSet, 'shop')
 
 router_main_category = routers.DefaultRouter()
-router_main_category.register(r'main_category', api.MainCategoryViewSet, 'shop')
+router_main_category.register(r'main_category', views.MainCategoryViewSet, 'shop')
 
 router_address= routers.DefaultRouter()
-router_address.register(r'address', api.AddressViewSet, 'shop')
+router_address.register(r'address', views.AddressViewSet, 'shop')
 
 router_product= routers.DefaultRouter()
-router_product.register(r'product', api.ProductViewSet, 'shop')
+router_product.register(r'product', views.ProductViewSet, 'shop')
 
 router_show_product= routers.DefaultRouter()
-router_show_product.register(r'showProduct', api.ShowProductViewSet, 'shop')
+router_show_product.register(r'showProduct', views.ShowProductViewSet, 'shop')
 
 router_query= routers.DefaultRouter()
-router_query.register(r'query', api.QueryViewSet, 'shop')
+router_query.register(r'query', views.QueryViewSet, 'shop')
 
 router_notification_cat= routers.DefaultRouter()
-router_notification_cat.register(r'notificationCat', api.NotificationCategoryViewSet, 'shop')
+router_notification_cat.register(r'notificationCat', views.NotificationCategoryViewSet, 'shop')
 
 router_notification= routers.DefaultRouter()
-router_notification.register(r'notification', api.NotificationViewSet, 'shop')
+router_notification.register(r'notification', views.NotificationViewSet, 'shop')
 
 urlpatterns = [
     path('', include(router_sub_category.urls)),
