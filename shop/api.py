@@ -16,7 +16,6 @@ from .models import *
 
 class SubCategoryViewSet(viewsets.ModelViewSet):
     queryset = SubCategory.objects.all().order_by('name')
-    permission_classes=[ permissions.AllowAny ]
     serializer_class = SubCategorySerializer
 
 
@@ -29,16 +28,34 @@ class AddressViewSet(viewsets.ModelViewSet):
     serializer_class = AddressSerializer 
 
 class ProductViewSet(viewsets.ModelViewSet):
-    queryset = Product.objects.all()
+    permission_classes=[ permissions.IsAuthenticated ]
     serializer_class = ProductSerializer
 
+    def get_queryset(self):
+        return self.request.user.products.all()
+    
+    def perform_create(self, serializer):
+        serializer.save(seller=self.request.user)
+
 class ShowProductViewSet(viewsets.ModelViewSet):
-    queryset = Product.objects.all()
+    permission_classes=[ permissions.IsAuthenticated ]
     serializer_class = ShowProductSerializer
+    
+    def get_queryset(self):
+        return self.request.user.products.all()
+    
+    def perform_create(self, serializer):
+        serializer.save(seller=self.request.user)
 
 class QueryViewSet(viewsets.ModelViewSet):
-    queryset = Query.objects.all().order_by('id')
+    permission_classes=[ permissions.IsAuthenticated ]
     serializer_class = QuerySerializer
+
+    def get_queryset(self):
+        return self.request.user.myQueries.all()
+    
+    def perform_create(self, serializer):
+        serializer.save(customer=self.request.user)
 
     
 class NotificationCategoryViewSet(viewsets.ModelViewSet):
@@ -47,5 +64,11 @@ class NotificationCategoryViewSet(viewsets.ModelViewSet):
 
     
 class NotificationViewSet(viewsets.ModelViewSet):
-    queryset = Notification.objects.all().order_by('id')
+    permission_classes=[ permissions.IsAuthenticated ]
     serializer_class = NotificationSerializer
+
+    def get_queryset(self):
+        return self.request.user.myNotifications.all()
+    
+    def perform_create(self, serializer):
+        serializer.save(customer=self.request.user)
