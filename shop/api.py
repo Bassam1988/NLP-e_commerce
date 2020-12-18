@@ -28,7 +28,7 @@ class AddressViewSet(viewsets.ModelViewSet):
     serializer_class = AddressSerializer 
 
 class ProductViewSet(viewsets.ModelViewSet):
-    permission_classes=[ permissions.IsAuthenticated ]
+    permission_classes=[ permissions.DjangoModelPermissions ]
     serializer_class = ProductSerializer
 
     def get_queryset(self):
@@ -38,7 +38,7 @@ class ProductViewSet(viewsets.ModelViewSet):
         serializer.save(seller=self.request.user)
 
 class ShowProductViewSet(viewsets.ModelViewSet):
-    permission_classes=[ permissions.IsAuthenticated ]
+    permission_classes=[ permissions.DjangoModelPermissions ]
     serializer_class = ShowProductSerializer
     
     def get_queryset(self):

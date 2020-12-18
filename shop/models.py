@@ -28,6 +28,8 @@ class Address(models.Model):
     def __str__(self):
         return self.country
 
+def upload_path(instance, filname):
+    return '/'.join(['img', str(instance.created_at), filname])
 
 class Product(models.Model):
     seller = models.ForeignKey(
@@ -37,7 +39,8 @@ class Product(models.Model):
     name = models.CharField(max_length=30)
     price = models.FloatField(default=0.00)
     description = models.CharField(max_length=1500)
-    img = models.CharField(max_length=30, default='./img/avatar.jpg')
+    img= models.ImageField(blank=True, null=True, upload_to=upload_path)
+    #img = models.CharField(max_length=30, default='./img/avatar.jpg')
     vedio = models.CharField(max_length=30, blank=True)
     s_categories = models.ManyToManyField(
         SubCategory, blank=False, related_name="products")

@@ -1,11 +1,12 @@
 import axios from "axios";
 import { createMessage, returnErrors } from "./messages";
+import {tokenConfig} from './auth'
 import * as actions from "./actionTypes";
 
 // Get Products
-export const getProducts = () => (dispatch) => {
+export const getProducts = () => (dispatch,getState) => {
   axios
-    .get("/shop/showProduct/")
+    .get("/shop/showProduct/",tokenConfig(getState))
     .then((res) => {
       dispatch({
         type: actions.GET_PRODUCTS,
@@ -18,9 +19,9 @@ export const getProducts = () => (dispatch) => {
 };
 
 // Delete Product
-export const delProduct = (id) => (dispatch) => {
+export const delProduct = (id) => (dispatch,getState) => {
   axios
-    .delete(`/shop/product/${id}/`)
+    .delete(`/shop/product/${id}/`, tokenConfig(getState))
     .then((res) => {
       dispatch(
         createMessage({ ProductDelete: "Product Deleted Successfully" })
@@ -36,10 +37,10 @@ export const delProduct = (id) => (dispatch) => {
 };
 
 // Add Product
-export const addProduct = (product) => (dispatch) => {
+export const addProduct = (product) => (dispatch,getState) => {
   console.log("addproduct");
   axios
-    .post("/shop/product/", product)
+    .post("/shop/product/", product,tokenConfig(getState))
     .then((res) => {
       dispatch(createMessage({ ProductAdd: "Product Added Successfully" }));
       dispatch({
