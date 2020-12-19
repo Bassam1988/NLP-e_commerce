@@ -22,6 +22,9 @@ router_show_product.register(r'showProduct', api.ShowProductViewSet, 'shop')
 router_query= routers.DefaultRouter()
 router_query.register(r'query', api.QueryViewSet, 'shop')
 
+router_feedback= routers.DefaultRouter()
+router_feedback.register(r'feedback', api.FeedbackViewSet, 'shop')
+
 router_notification_cat= routers.DefaultRouter()
 router_notification_cat.register(r'notificationCat', api.NotificationCategoryViewSet, 'shop')
 
@@ -37,5 +40,6 @@ urlpatterns = [
     path('', include(router_query.urls)),
     path('', include(router_notification_cat.urls)),
     path('', include(router_notification.urls)),
+    path('', include(router_feedback.urls)),
     #path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

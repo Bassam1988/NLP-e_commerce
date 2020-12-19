@@ -57,6 +57,16 @@ class QueryViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(customer=self.request.user)
 
+class FeedbackViewSet(viewsets.ModelViewSet):
+    permission_classes=[ permissions.IsAuthenticated ]
+    serializer_class = FeedbackSerializer
+
+    def get_queryset(self):
+        return self.request.user.feedbacks.all()
+    
+    def perform_create(self, serializer):
+        serializer.save(customer=self.request.user)
+
     
 class NotificationCategoryViewSet(viewsets.ModelViewSet):
     queryset = NotificationCategory.objects.all().order_by('id')

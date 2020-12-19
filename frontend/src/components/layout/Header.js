@@ -7,97 +7,155 @@ function Header() {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   return (
-    <nav className="navbar navbar-expand-lg  navbar-dark bg-primary">
-      <a className="navbar-brand" href="#">
-        WYW-WYD
-      </a>
-      <button
-        className="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarNavDropdown"
-        aria-controls="navbarNavDropdown"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span className="navbar-toggler-icon"></span>
-      </button>
-      <div className="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul className="navbar-nav">
-          <li className="nav-item active">
-            <a className="nav-link" href="#">
-              Home <span className="sr-only">(current)</span>
-            </a>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link" href="#">
-              Features
-            </a>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link" href="#">
-              Pricing
-            </a>
-          </li>
-          <li className="nav-item dropdown">
-            <a
-              className="nav-link dropdown-toggle"
-              href="#"
-              id="navbarDropdownMenuLink"
-              role="button"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              Dropdown link
-            </a>
-            <div
-              className="dropdown-menu"
-              aria-labelledby="navbarDropdownMenuLink"
-            >
-              <a className="dropdown-item" href="#">
-                Action
-              </a>
-              <a className="dropdown-item" href="#">
-                Another action
-              </a>
-              <a className="dropdown-item" href="#">
-                Something else here
-              </a>
+    <div>
+      <div className="header-area">
+        <div className="container">
+          <div className="row">
+            <div className="col-md-8">
+              <div className="user-menu">
+                {auth.isAuthenticated ? (
+                  <ul>
+                    <li>
+                      <a href="#">
+                        <i className="fa fa-user"></i> My Account
+                      </a>
+                    </li>
+
+                    <li>
+                    <a href="#" onClick={() => dispatch(logoutUser())} ><i  className="fa fa-user"></i> Logout</a>
+                    </li>
+                  </ul>
+                ) : (
+                  <ul >
+                    <li >
+                      <Link to="/register" className="fa fa-user">
+                        Register
+                      </Link>
+                    </li>
+                    <li >
+                      <Link to="/login" className="fa fa-user">
+                        Login
+                      </Link>
+                    </li>
+                  </ul>
+                )}
+              </div>
             </div>
-          </li>
-        </ul>
+
+            <div className="col-md-4">
+              <div className="header-right">
+                <ul className="list-unstyled list-inline">
+                  <li className="dropdown dropdown-small">
+                    <a
+                      data-toggle="dropdown"
+                      data-hover="dropdown"
+                      className="dropdown-toggle"
+                      href="#"
+                    >
+                      <span className="key">currency :</span>
+                      <span className="value">USD </span>
+                      <b className="caret"></b>
+                    </a>
+                    <ul className="dropdown-menu">
+                      <li>
+                        <a href="#">USD</a>
+                      </li>
+                      <li>
+                        <a href="#">INR</a>
+                      </li>
+                      <li>
+                        <a href="#">GBP</a>
+                      </li>
+                    </ul>
+                  </li>
+
+                  <li className="dropdown dropdown-small">
+                    <a
+                      data-toggle="dropdown"
+                      data-hover="dropdown"
+                      className="dropdown-toggle"
+                      href="#"
+                    >
+                      <span className="key">language :</span>
+                      <span className="value">English </span>
+                      <b className="caret"></b>
+                    </a>
+                    <ul className="dropdown-menu">
+                      <li>
+                        <a href="#">English</a>
+                      </li>
+                      <li>
+                        <a href="#">French</a>
+                      </li>
+                      <li>
+                        <a href="#">German</a>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="site-branding-area">
+        <div className="container">
+          <div className="row">
+            <div className="col-sm-6">
+              <div className="logo">
+                <h1>
+                  <a href="/">
+                    WYW-WYD <br></br> <span>BuyWhatYouWantSellWhatYouDo</span>
+                  </a>
+                </h1>
+              </div>
+            </div>
+
+            <div className="col-sm-6">
+              <div className="shopping-item">
+                {auth.isAuthenticated ? ( <span className="navbar-text mr-3">
+                      <strong>
+                        {auth.user ? `Welcome ${auth.user.first_name}` : ""}
+                      </strong>
+                    </span>) : ( <span className="navbar-text mr-3">
+                      <strong>
+                        Welcome to our website, Please register 
+                      </strong>
+                    </span>)}
+             
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {auth.isAuthenticated ? (
-        <ul className="nav justify-content-end  my-2 my-lg-0 navbar-nav">
-          <span className="navbar-text mr-3">
-            <strong>{auth.user ? `Welcome ${auth.user.first_name}` : ""}</strong>
-          </span>
-          <li className="nav-item">
-            <button
-              className="nav-link btn btn-sm btn-primary"
-              onClick={() => dispatch(logoutUser())}
-            >
-              Logout
-            </button>
-          </li>
-        </ul>
-      ) : (
-        <ul className="nav justify-content-end  my-2 my-lg-0 navbar-nav">
-          <li className="nav-item">
-            <Link to="/register" className="nav-link">
-              Register
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link to="/login" className="nav-link">
-              Login
-            </Link>
-          </li>
-        </ul>
-      )}
-    </nav>
+      <div className="mainmenu-area">
+        <div className="container">
+            <div className="row">
+                <div className="navbar-header">
+                    <button type="button" className="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span className="sr-only">Toggle navigation</span>
+                        <span className="icon-bar"></span>
+                        <span className="icon-bar"></span>
+                        <span className="icon-bar"></span>
+                    </button>
+                </div> 
+                <div className="navbar-collapse collapse">
+                    <ul className="nav navbar-nav">
+                        <li className="active"><a href="index.html">Home</a></li>
+                        <li><a href="shop.html">Shop page</a></li>
+                        <li><a href="single-product.html">Single product</a></li>
+                        <li><a href="cart.html">Cart</a></li>
+                        <li><a href="checkout.html">Checkout</a></li>
+                        <li><a href="#">Category</a></li>
+                        <li><a href="#">Others</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>  
+            </div>
+        </div>
+    </div>
+    </div>
   );
 }
 

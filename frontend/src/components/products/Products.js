@@ -1,5 +1,6 @@
 import React, { Component, Fragment, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { getProducts, delProduct } from "../../redux/actions/productsActions";
@@ -9,8 +10,8 @@ function Products() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getProducts());
-    console.log(products)
-  },[]);
+    console.log(products);
+  }, []);
   return (
     <Fragment>
       <h1>Products List</h1>
@@ -30,12 +31,18 @@ function Products() {
           {products ? (
             products.map((product) => (
               <tr key={product.id}>
-                <td>{product.id}</td>
-                <td>{product.name}</td>
+                <td>
+                  <Link to={`/viewProduct/${product.id}`} >
+                    {product.name}
+                  </Link>
+                </td>
                 <td>{product.seller.username}</td>
                 <td>{product.m_category.name}</td>
                 <td>{product.s_categories[0].name}</td>
                 <td>{product.addresses[0].country}</td>
+                <td>
+                  <img src={product.img}></img>{" "}
+                </td>
                 <td>
                   <button
                     className="btn btn-danger btn-sm"

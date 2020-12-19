@@ -53,6 +53,18 @@ class Product(models.Model):
         return self.name
 
 
+class Feedback(models.Model):
+    customer = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="feedbacks")
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, related_name="feedbacks")
+    description = models.CharField(max_length=100)
+    rating = models.IntegerField()
+    created_at = models.DateField(default=datetime.now)
+
+    def __str__(self):
+        return self.description
+
 class Query(models.Model):
     customer = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="myQueries")

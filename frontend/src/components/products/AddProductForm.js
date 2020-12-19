@@ -76,7 +76,7 @@ function AddProductForm() {
           <label>Image</label>
           <input
             type="file"
-            onChange={(evt) => setImage(evt.target.files)}
+            onChange={(evt) => setImage(evt.target.files[0])}
           />
         </div>
 
