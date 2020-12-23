@@ -10,7 +10,7 @@ function Products() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getProducts());
-    console.log(products);
+    
   }, []);
   return (
     <Fragment>
@@ -32,14 +32,14 @@ function Products() {
             products.map((product) => (
               <tr key={product.id}>
                 <td>
-                  <Link to={`/viewProduct/${product.id}`} >
+                 <Link to={{pathname: '/viewProduct/',state: {product1:product} }} >
                     {product.name}
                   </Link>
                 </td>
                 <td>{product.seller.username}</td>
                 <td>{product.m_category.name}</td>
-                <td>{product.s_categories[0].name}</td>
-                <td>{product.addresses[0].country}</td>
+                <td>{ product.s_categories.length!=0 ? product.s_categories[0].name : "no sub category"}</td>
+                <td>{product.addresses.length!=0 ? product.addresses[0].country: "No Address"}</td>
                 <td>
                   <img src={product.img}></img>{" "}
                 </td>

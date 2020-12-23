@@ -54,7 +54,7 @@ function Login() {
         </form>
       </div>
     </div>
-  ) :(<Redirect to="/"/>))
+  ) :(<Redirect to="/dashboard"/>))
 }
 
 export default Login;

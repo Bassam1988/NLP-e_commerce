@@ -1,9 +1,13 @@
 from django.db import models
 from datetime import datetime
+
 # Create your models here.
 from django.contrib.auth.models import User
 
+
 # Register your models here.
+
+
 
 
 class MainCategory(models.Model):
@@ -38,6 +42,7 @@ class Product(models.Model):
         MainCategory, on_delete=models.CASCADE, default=1, related_name="products")
     name = models.CharField(max_length=30)
     price = models.FloatField(default=0.00)
+    old_price = models.FloatField(default=0.00)
     description = models.CharField(max_length=1500)
     img= models.ImageField(blank=True, null=True, upload_to=upload_path)
     #img = models.CharField(max_length=30, default='./img/avatar.jpg')
@@ -48,19 +53,31 @@ class Product(models.Model):
     addresses = models.ManyToManyField(
         Address, blank=False, related_name="products")
     created_at = models.DateField(default=datetime.now)
+    viewd_at = models.DateField(default=datetime.now,editable=True)
+    numberOfViews = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name
 
+
+
+
+class ProductImages(models.Model):
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, related_name="images")
+    img= models.ImageField(blank=True, null=True, upload_to=upload_path)
+    created_at = models.DateField(default=datetime.now)
+
+    
 
 class Feedback(models.Model):
     customer = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="feedbacks")
     product = models.ForeignKey(
         Product, on_delete=models.CASCADE, related_name="feedbacks")
-    description = models.CharField(max_length=100)
-    rating = models.IntegerField()
-    created_at = models.DateField(default=datetime.now)
+    description = models.CharField(max_length=300)
+    rating = models.FloatField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.description

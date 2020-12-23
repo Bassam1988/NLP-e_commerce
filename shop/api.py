@@ -2,9 +2,6 @@ from rest_framework import viewsets, permissions
 
 from .serializers import *
 
-from .models import *
-
-
 from django.shortcuts import render
 
 from rest_framework import viewsets
@@ -62,7 +59,7 @@ class FeedbackViewSet(viewsets.ModelViewSet):
     serializer_class = FeedbackSerializer
 
     def get_queryset(self):
-        return self.request.user.feedbacks.all()
+        return self.request.user.feedbacks.all().order_by('created_at')
     
     def perform_create(self, serializer):
         serializer.save(customer=self.request.user)

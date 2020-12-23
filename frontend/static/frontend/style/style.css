@@ -17,6 +17,40 @@ img {
     max-width: 100%;
     height: auto;
 }
+.text-center{text-align:center!important}@media (min-width:576px){.text-sm-left{text-align:left!important}
+
+.rounded-circle {
+    border-radius: 50% !important;
+    
+  }
+
+  .img-thumbnail {
+    padding: 0.25rem;
+    background-color: #f8fafc;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    max-width: 100%;
+    height: auto;
+  }
+  figcaption,figure {display:block}
+  figure{margin:0 0 1rem}img{vertical-align:middle;border-style:none}
+
+  .mb-2,
+.my-2 {
+  margin-bottom: 0.5rem !important;
+}
+
+.text-center {
+    text-align: center !important;
+  }
+
+  
+  }
+  .justify-content-between{-ms-flex-pack:justify!important;justify-content:space-between!important}
+  .d-flex{display:-ms-flexbox!important;display:flex!important}
+  
+
+
 .fix { overflow: hidden }
 h1,
 h2,
@@ -29,7 +63,13 @@ h6 {
 }
 body { font-family: 'Titillium Web', sans-serif; }
 
-
+.mb-1,
+.my-1 {
+  margin-bottom: 0.25rem !important;
+}
+.img-thumbnail{padding:.25rem;background-color:#fff;border:1px solid #dee2e6;border-radius:.25rem;max-width:60px;height:auto}
+.figure{display:inline-block}.figure-img{margin-bottom:.5rem;line-height:1}
+.figure-caption{font-size:90%;color:#6c757d}code{font-size:87.5%;color:#e83e8c;word-wrap:break-word}a>code{color:inherit}
 
 .header-area {
     background: none repeat scroll 0 0 #f4f4f4;
@@ -752,7 +792,7 @@ form.cart {
     font-weight: 700;
 }
 .rating-wrap-post {
-    font-size: 20px;
+    font-size: 40px;
 }
 
 .submit-review textarea {

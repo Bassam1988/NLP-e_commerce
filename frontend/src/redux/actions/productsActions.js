@@ -1,12 +1,12 @@
 import axios from "axios";
 import { createMessage, returnErrors } from "./messages";
-import {tokenConfig} from './auth'
+import { tokenConfig } from "./auth";
 import * as actions from "./actionTypes";
 
 // Get Products
-export const getProducts = () => (dispatch,getState) => {
+export const getProducts = () => (dispatch, getState) => {
   axios
-    .get("/shop/showProduct/",tokenConfig(getState))
+    .get("/shop/showProduct/", tokenConfig(getState))
     .then((res) => {
       dispatch({
         type: actions.GET_PRODUCTS,
@@ -19,7 +19,7 @@ export const getProducts = () => (dispatch,getState) => {
 };
 
 // Delete Product
-export const delProduct = (id) => (dispatch,getState) => {
+export const delProduct = (id) => (dispatch, getState) => {
   axios
     .delete(`/shop/product/${id}/`, tokenConfig(getState))
     .then((res) => {
@@ -32,15 +32,14 @@ export const delProduct = (id) => (dispatch,getState) => {
       });
     })
     .catch((err) =>
-    dispatch(returnErrors(err.response.data, err.response.status))
-  );
+      dispatch(returnErrors(err.response.data, err.response.status))
+    );
 };
 
 // Add Product
-export const addProduct = (product) => (dispatch,getState) => {
-  console.log("addproduct");
+export const addProduct = (product) => (dispatch, getState) => {
   axios
-    .post("/shop/product/", product,tokenConfig(getState))
+    .post("/shop/product/", product, tokenConfig(getState))
     .then((res) => {
       dispatch(createMessage({ ProductAdd: "Product Added Successfully" }));
       dispatch({
@@ -49,6 +48,24 @@ export const addProduct = (product) => (dispatch,getState) => {
       });
     })
     .catch((err) =>
-    dispatch(returnErrors(err.response.data, err.response.status))
-  );
+      dispatch(returnErrors(err.response.data, err.response.status))
+    );
+};
+
+export const addFeedback = (feedback,handleFeedbackCange) => (dispatch, getState) => {
+  //const body=JSON.stringify(user)
+  axios
+    .post("/shop/feedback/", feedback, tokenConfig(getState))
+    .then((res) => {
+      handleFeedbackCange(res.data)
+      dispatch(createMessage({ feedbackAdd: "Feedback Added Successfully" }));
+      dispatch({
+        type: actions.ADD_FEEDBACK,
+        payload: { feedback: res.data, },
+        
+      });
+    })
+    .catch((err) =>
+      dispatch(returnErrors(err.response.data, err.response.status))
+    );
 };

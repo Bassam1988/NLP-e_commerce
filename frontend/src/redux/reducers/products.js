@@ -19,11 +19,20 @@ export default function productReducer (state = initialState, action) {
         ),
       };
     case actions.ADD_PRODUCT:
-      console.log("caseAdd");
       return {
         ...state,
         products: [...state.products, action.payload],
       };
+    case actions.ADD_FEEDBACK:
+      console.log("addfeedback")
+      console.log(action.payload)
+      console.log("addfeedback")
+      return {
+        ...state,
+        products: state.products.map(product =>
+          product.id == action.payload.feedback.product ? { ...product,feedbacks:[...product.feedbacks, action.payload.feedback]} : product
+        ),
+        };
     default:
       return state;
   }

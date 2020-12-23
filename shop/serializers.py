@@ -1,18 +1,9 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from accounts.models import Profile
+from accounts.serializers import UserSerializer, UserListField
 
 from .models import *
-
-
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = SubCategory
-        fields = ('username', 'password')
-
-
-class UserListField(serializers.RelatedField):
-    def to_representation(self, value):
-        return {"username": value.username, "email": value.email, "first_name": value.first_name, "last_name": value.last_name}
 
 
 class SubCategorySerializer(serializers.HyperlinkedModelSerializer):
@@ -58,13 +49,37 @@ class AddressListField(serializers.RelatedField):
 class FeedbackListField(serializers.RelatedField):
 
     def to_representation(self, value):
-        return {"id": value.id, "description": value.description, "rating": value.rating}
+        return {"id": value.id, "description": value.description, "rating": value.rating,"created_at":value.created_at, "customer": value.customer.first_name + value.customer.last_name}
+
+
+class ProductImagesListField(serializers.RelatedField):
+
+    def to_representation(self, value):
+        return {"id": value.id, "img": value.img}
+
+
+class FeedbackSerializer(serializers.ModelSerializer):
+    #customer = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=False)
+    customer = UserSerializer(many=False, read_only=True)  # UserListField(read_only=True, many=False)
+    product = serializers.PrimaryKeyRelatedField(
+        queryset=Product.objects.all(), many=False)
+    #created_at = serializers.DateField(required=False, read_only=True)
+    class Meta:
+        model = Feedback
+        set_timezone = 'created_at'
+        fields = ('id', 'customer', 'product', 'description', 'rating','created_at')
+       # extra_kwargs = {'created_at': {'read-only': True}}
+        #read_only_fields = ('created_at', )
+      
+
 
 
 class ShowProductSerializer(serializers.ModelSerializer):
 
     addresses = AddressListField(read_only=True, many=True)
-    feedbacks = FeedbackListField(read_only=True, many=True)
+    #feedbacks = FeedbackListField(read_only=True, many=True)
+    feedbacks = FeedbackSerializer(many=True, read_only=True)
+    images = ProductImagesListField(read_only=True, many=True)
     #addresses = serializers.PrimaryKeyRelatedField(queryset=Address.objects.all(), many=True)
     #seller_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=False)
     seller = UserListField(read_only=True, many=False)
@@ -75,15 +90,15 @@ class ShowProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ('id', 'seller', 'm_category', 'name', 'price', 'description', 'img',
-                  'vedio', 's_categories', 'other_s_category', 'addresses', 'feedbacks')
+        fields = ('id', 'seller', 'm_category', 'name', 'price', 'old_price', 'viewd_at', 'numberOfViews', 'description', 'img',
+                  'vedio', 's_categories', 'other_s_category', 'addresses', 'feedbacks', 'images','viewd_at')
+        depth = 2
 
 
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
     addresses = serializers.PrimaryKeyRelatedField(
         queryset=Address.objects.all(), many=True)
-    seller = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.all(), many=False)
+    #seller = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=False)
     m_category = serializers.PrimaryKeyRelatedField(
         queryset=MainCategory.objects.all(), many=False)
     s_categories = serializers.PrimaryKeyRelatedField(
@@ -91,8 +106,8 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Product
-        fields = ('id', 'seller', 'm_category', 'name', 'price', 'description',
-                  'img', 'vedio', 's_categories', 'other_s_category', 'addresses')
+        fields = ('id', 'm_category', 'name', 'price', 'description',
+                  'img', 'vedio', 's_categories', 'other_s_category', 'addresses','viewd_at')
 
 
 class QuerySerializer(serializers.HyperlinkedModelSerializer):
@@ -110,15 +125,13 @@ class QueryListField(serializers.RelatedField):
         return {"id": value.id, "description": value.description}
 
 
-class FeedbackSerializer(serializers.HyperlinkedModelSerializer):
-    customer = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.all(), many=False)
+class ProductImagesSerializer(serializers.HyperlinkedModelSerializer):
     product = serializers.PrimaryKeyRelatedField(
         queryset=Product.objects.all(), many=False)
 
     class Meta:
         model = Feedback
-        fields = ('id', 'customer', 'product', 'description', 'rating')
+        fields = ('id', 'product', 'img')
 
 
 class NotificationCategorySerializer(serializers.HyperlinkedModelSerializer):

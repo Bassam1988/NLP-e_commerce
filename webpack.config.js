@@ -1,4 +1,5 @@
 module.exports = {
+    resolve:{fallback: { "url": false }},
     module: {
         rules: [
             {

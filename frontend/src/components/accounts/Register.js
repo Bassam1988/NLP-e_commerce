@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import {createMessage} from '../../redux/actions/messages';
-import {registerUser} from '../../redux/actions/auth';
-
-
+import { createMessage } from "../../redux/actions/messages";
+import { registerUser } from "../../redux/actions/auth";
 
 function Register() {
   const [username, setUnserName] = useState("");
@@ -14,31 +12,56 @@ function Register() {
   const [last_name, setLastName] = useState("");
   const [first_name, setFirstName] = useState("");
   const [groups, setGroup] = useState([]);
+  const [aboutMe, setAboutMe] = useState("");
+  const [location, setLocation] = useState("");
+  const [birth_day, setBirthDay] = useState("");
+  const [profilePicture, setProfilePicture] = useState();
 
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   const onSubmit = (e) => {
     e.preventDefault();
-    
+
     if (password !== password2) {
-      dispatch(createMessage({ passwordNotMatch: 'Passwords do not match' }));
+      dispatch(createMessage({ passwordNotMatch: "Passwords do not match" }));
     } else {
-      const newUser = {
+      const uploadData = new FormData();
+      uploadData.append("img", profilePicture, profilePicture.name);
+     uploadData.append("bio", aboutMe);
+      uploadData.append("location", location);
+      uploadData.append("birth_date", birth_day);
+     const newUser = new FormData();
+      newUser.append("first_name", first_name);
+      newUser.append("last_name", last_name);
+      newUser.append("username", username);
+      newUser.append("email", email);
+      newUser.append("password", password);
+      newUser.append("groups", groups);
+      newUser.append("profile.img", profilePicture, profilePicture.name);
+      newUser.append("profile.bio", aboutMe);
+      newUser.append("profile.location", location);
+      newUser.append("profile.birth_date", birth_day);
+      
+      /*const newUser = {
         first_name,
         last_name,
         username,
         email,
         password,
-        groups
-        
-      };
+        groups,
+        profile:{
+          'bio':aboutMe,
+          location,
+          'birth_date': birth_day,
+          'img':uploadData
+         },
+      };*/
       dispatch(registerUser(newUser));
     }
   };
 
-  return (
-    !isAuthenticated ? (
+  return !isAuthenticated ? (
     <div className="col-md-6 m-auto">
       <div className="card card-body mt-5">
         <h2 className="text-center">Register</h2>
@@ -53,7 +76,6 @@ function Register() {
               value={first_name}
               required
             ></input>
-           
           </div>
           <div className="form-group">
             <label htmlFor="validationServer02">Last name</label>
@@ -65,7 +87,50 @@ function Register() {
               value={last_name}
               required
             ></input>
-            
+          </div>
+          <div className="form-group">
+            <label htmlFor="validationServer02">About me</label>
+            <input
+              type="text"
+              className="form-control"
+              
+              onChange={(e) => setAboutMe(e.target.value)}
+              value={aboutMe}
+              required
+            ></input>
+          </div>
+          <div className="form-group">
+            <label htmlFor="validationServer02">Location</label>
+            <input
+              type="text"
+              className="form-control"
+              
+              onChange={(e) => setLocation(e.target.value)}
+              value={location}
+              required
+            ></input>
+          </div>
+          <div className="form-group">
+            <label htmlFor="validationServer02">BirthDay</label>
+            <input
+              type="text"
+              className="form-control"
+              
+              onChange={(e) => setBirthDay(e.target.value)}
+              value={birth_day}
+              required
+            ></input>
+          </div>
+          <div className="form-group">
+            <label htmlFor="validationServer02">Profile Picture</label>
+            <input
+              type="file"
+              className="form-control"
+              
+              onChange={(e) => setProfilePicture(e.target.files[0])}
+              
+              required
+            ></input>
           </div>
           <div className="form-group">
             <label htmlFor="validationServer02">User Name</label>
@@ -77,7 +142,6 @@ function Register() {
               value={username}
               required
             ></input>
-            
           </div>
           <div className="form-group">
             <label htmlFor="exampleInputEmail1">Email address</label>
@@ -113,10 +177,7 @@ function Register() {
               value={password2}
             ></input>
           </div>
-          <div
-            className="radio"
-            onChange={(e) => setGroup([e.target.value])}
-          >
+          <div className="radio" onChange={(e) => setGroup([e.target.value])}>
             <input type="radio" value="6" name="expType" /> Customer <br />
             <input type="radio" value="5" name="expType" /> Seller
           </div>
@@ -129,7 +190,9 @@ function Register() {
           </p>
         </form>
       </div>
-    </div>):(<Redirect to="/"/>)
+    </div>
+  ) : (
+    <Redirect to="/dashboard" />
   );
 }
 

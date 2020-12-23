@@ -24,6 +24,8 @@ import Register from "./accounts/Register";
 
 import ViewProduct from "./products/ViewProduct"
 
+import Main from './common/Router'
+
 
 
 import PrivateRoute from "./common/PrivateRoute";
@@ -48,13 +50,7 @@ function App() {
             <Header />
             <Alerts />
             <div className="container">
-              <Switch>
-                <PrivateRoute exact path="/" component={Dashboard} />
-            <PrivateRoute exact path="/viewProduct/:productID" component={ViewProduct} />
-                
-                <Route exact path="/register" component={Register} />
-                <Route exact path="/login" component={Login} />
-              </Switch>
+            <Route component={Main} />
             </div>
           </Fragment>
         </Router>
