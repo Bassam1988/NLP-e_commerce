@@ -3,7 +3,7 @@ import ReactStars from "react-rating-stars-component";
 
 const Image = {
   flex: 1,
-  width: 700,
+  width: 70,
   height: 60,
   resizeMode: "contain",
 };

@@ -14,12 +14,12 @@ import ViewProduct from '../products/ViewProduct';
 const Main = props1 => (
     <Switch>
         {/*User might LogIn*/}
-        <Route exact path='/' component={Home} />
+        {/*<Route exact path='/' component={Home} />*/}
         {/*User will LogIn*/}
         <Route path='/login' component={Login} />
         <Route path='/register' component={Register} />
         {/* User is LoggedIn*/}
-        <PrivateRoute path='/dashboard' component={Dashboard} />
+        <PrivateRoute path='/dashboard' component={Home} />
         <PrivateRoute path='/ViewProduct' component={ViewProduct} />
 
         {/*Page Not Found*/}

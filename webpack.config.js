@@ -1,3 +1,5 @@
+//import webpack from 'webpack';
+var webpack = require('webpack');
 module.exports = {
     resolve:{fallback: { "url": false }},
     module: {
@@ -9,6 +11,12 @@ module.exports = {
                     loader:"babel-loader"
                 }
             }
-        ]
+        ],
+
     }
 }
+
+new webpack.ProvidePlugin({
+    $: 'jquery',
+    jQuery: 'jquery'
+  });

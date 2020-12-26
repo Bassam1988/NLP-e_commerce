@@ -1,12 +1,7 @@
-import React, { Component, Fragment, useEffect } from "react";
+import React, { Fragment, useEffect } from "react";
 import ReactDOM from "react-dom";
 
-import {
-  HashRouter as Router,
-  Route,
-  Switch,
-  Redirect,
-} from "react-router-dom";
+import { HashRouter as Router, Route } from "react-router-dom";
 
 import { Provider as AlertProvider } from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
@@ -19,18 +14,11 @@ import Dashboard from "./products/Dashboard";
 import { Provider } from "react-redux";
 import store from "../redux/store";
 
-import Login from "./accounts/Login";
-import Register from "./accounts/Register";
-
-import ViewProduct from "./products/ViewProduct"
-
-import Main from './common/Router'
-
-
-
-import PrivateRoute from "./common/PrivateRoute";
+import Main from "./common/Router";
 
 import { loadUser } from "../redux/actions/auth";
+
+
 
 const alertOptions = {
   timeout: 3000,
@@ -49,8 +37,8 @@ function App() {
           <Fragment>
             <Header />
             <Alerts />
-            <div className="container">
-            <Route component={Main} />
+            <div>
+              <Route component={Main} />
             </div>
           </Fragment>
         </Router>

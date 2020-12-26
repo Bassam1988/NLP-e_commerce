@@ -18,7 +18,7 @@ function Login() {
 
   return (
     !isAuthenticated ? (
-    <div className="col-md-6 m-auto">
+    <div className="col-md-6 m-auto container">
       <div className="card card-body mt-5">
         <h2 className="text-center">Login</h2>
         <form onSubmit={onSubmit}>
