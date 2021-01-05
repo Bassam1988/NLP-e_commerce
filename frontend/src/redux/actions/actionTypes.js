@@ -19,3 +19,5 @@ export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
 export const REGISTER_FAIL = "REGISTER_FAIL";
 
 export const ADD_FEEDBACK = "ADD_FEEDBACK";
+
+export const GET_SUBCAT = "GET_SUBCAT";

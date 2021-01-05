@@ -9,7 +9,7 @@ from .models import *
 class SubCategorySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = SubCategory
-        fields = ('name',)
+        fields = ('id', 'name',)
 
 
 class SubCategoryListField(serializers.RelatedField):
@@ -31,13 +31,13 @@ class MainCategoryListField(serializers.RelatedField):
         return {"id": value.id, "name": value.name}
 
 
-class AddressSerializer(serializers.HyperlinkedModelSerializer):
+class AddressSerializer(serializers.ModelSerializer):
     #products = ProductSerializer(many=True, read_only=True)
     #products = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all(), many=True)
     class Meta:
         model = Address
         fields = ('id', 'country', 'state', 'city', 'region',
-                  'Address', 'google_map', 'products')
+                  'Address', 'google_map')
 
 
 class AddressListField(serializers.RelatedField):
@@ -49,7 +49,7 @@ class AddressListField(serializers.RelatedField):
 class FeedbackListField(serializers.RelatedField):
 
     def to_representation(self, value):
-        return {"id": value.id, "description": value.description, "rating": value.rating,"created_at":value.created_at, "customer": value.customer.first_name + value.customer.last_name}
+        return {"id": value.id, "description": value.description, "rating": value.rating, "created_at": value.created_at, "customer": value.customer.first_name + value.customer.last_name}
 
 
 class ProductImagesListField(serializers.RelatedField):
@@ -60,18 +60,19 @@ class ProductImagesListField(serializers.RelatedField):
 
 class FeedbackSerializer(serializers.ModelSerializer):
     #customer = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=False)
-    customer = UserSerializer(many=False, read_only=True)  # UserListField(read_only=True, many=False)
+    # UserListField(read_only=True, many=False)
+    customer = UserSerializer(many=False, read_only=True)
     product = serializers.PrimaryKeyRelatedField(
         queryset=Product.objects.all(), many=False)
     #created_at = serializers.DateField(required=False, read_only=True)
+
     class Meta:
         model = Feedback
         set_timezone = 'created_at'
-        fields = ('id', 'customer', 'product', 'description', 'rating','created_at')
+        fields = ('id', 'customer', 'product',
+                  'description', 'rating', 'created_at')
        # extra_kwargs = {'created_at': {'read-only': True}}
         #read_only_fields = ('created_at', )
-      
-
 
 
 class ShowProductSerializer(serializers.ModelSerializer):
@@ -91,23 +92,61 @@ class ShowProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ('id', 'seller', 'm_category', 'name', 'price', 'old_price', 'viewd_at', 'numberOfViews', 'description', 'img',
-                  'vedio', 's_categories', 'other_s_category', 'addresses', 'feedbacks', 'images','viewd_at','numberOfViews','created_at')
+                  'vedio', 's_categories', 'other_s_category', 'addresses', 'feedbacks', 'images', 'created_at')
         depth = 2
 
+    def create(self, validated_data):
 
-class ProductSerializer(serializers.HyperlinkedModelSerializer):
-    addresses = serializers.PrimaryKeyRelatedField(
-        queryset=Address.objects.all(), many=True)
+        product = Product.objects.create(validated_data['name'],
+                                         validated_data['description'], validated_data['price'])
+
+        product.seller = validated_data['seller']
+        product.m_category = validated_data['m_category']
+        product.old_price = validated_data['old_price']
+
+        s_categories_data = validated_data.pop('s_categories')
+        for s_category_data in s_categories_data:
+            new_s_category = SubCategory.objects.get(id=s_category_data)
+            product.s_categories.add(new_s_category)
+        product.save()
+
+
+class ProductSerializer(serializers.ModelSerializer):
+    #addresses = serializers.PrimaryKeyRelatedField(source='addresses.id', queryset=Address.objects.all(), many=True)
+    #addresses = AddressSerializer(many=True,read_only=True)
     #seller = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=False)
-    m_category = serializers.PrimaryKeyRelatedField(
-        queryset=MainCategory.objects.all(), many=False)
-    s_categories = serializers.PrimaryKeyRelatedField(
-        queryset=SubCategory.objects.all(), many=True)
-
+    #m_category = serializers.PrimaryKeyRelatedField( queryset=MainCategory.objects.all(), many=False)
+    #s_categories = serializers.PrimaryKeyRelatedField(queryset=SubCategory.objects.all(), many=True)
+    #s_categories = SubCategorySerializer(many=True )
     class Meta:
         model = Product
-        fields = ('id', 'm_category', 'name', 'price', 'description',
-                  'img', 'vedio', 's_categories', 'other_s_category', 'addresses','viewd_at')
+        fields = ('seller','m_category', 'name', 'price', 'description', 'old_price',
+                  'img', 'vedio', 's_categories', 'other_s_category', 'addresses', 'viewd_at')
+       
+
+
+    def create(self, validated_data):
+
+        #seller_id = validated_data['seller'].id
+        user=self.context.get('seller_data')
+        product = Product.objects.create(seller=user)
+        #product = Product.objects.create(**validated_data)
+
+       # product.seller = validated_data['seller']
+        product.m_category = validated_data['m_category']
+        product.old_price = validated_data['old_price']
+        #product.s_categories.set(validated_data.pop('s_categories'))
+        s_categories_data = validated_data.pop('s_categories')
+        for s_category_data in s_categories_data:
+            new_s_category = SubCategory.objects.get(id=s_category_data.id)
+            product.s_categories.add(new_s_category)
+        addresses_data = validated_data.pop('addresses')
+        for address_data in addresses_data:
+            new_address = Address.objects.get(id=address_data.id)
+            product.addresses.add(new_address)
+        product.save()
+
+        return product
 
 
 class QuerySerializer(serializers.HyperlinkedModelSerializer):

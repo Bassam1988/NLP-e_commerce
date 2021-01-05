@@ -1,6 +1,6 @@
 
 
-import $ from 'jquery';
+/*import $ from 'jquery';
 import Popper from 'popper.js';
 import 'jquery/dist/jquery.min'
 import 'bootstrap/dist/js/bootstrap.min.js';
@@ -15,6 +15,6 @@ import '../static/frontend/style/css/responsive.css'
 import 'owl.carousel/dist/assets/owl.carousel.css';
 
 global.jQuery = require('jquery');
-require('bootstrap');
+require('bootstrap');*/
 
 import App from './components/App'

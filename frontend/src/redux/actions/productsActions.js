@@ -18,6 +18,20 @@ export const getProducts = () => (dispatch, getState) => {
     );
 };
 
+export const getSubCategories = () => (dispatch, getState) => {
+  axios
+    .get("/shop/sub_category/", tokenConfig(getState))
+    .then((res) => {
+      dispatch({
+        type: actions.GET_SUBCAT,
+        payload: res.data,
+      });
+    })
+    .catch((err) =>
+      dispatch(returnErrors(err.response.data, err.response.status))
+    );
+};
+
 // Delete Product
 export const delProduct = (id) => (dispatch, getState) => {
   axios

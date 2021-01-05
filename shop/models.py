@@ -16,9 +16,9 @@ class MainCategory(models.Model):
 
 class SubCategory(models.Model):
     name = models.CharField(max_length=30)
+    img= models.ImageField(blank=True, null=True, upload_to='/'.join(['img/subCategories', str(datetime.now())]))
 
-    def __str__(self):
-        return self.name
+    
 
 
 class Address(models.Model):
@@ -29,8 +29,7 @@ class Address(models.Model):
     Address = models.CharField(max_length=200)
     google_map = models.CharField(max_length=100)
 
-    def __str__(self):
-        return self.country
+    
 
 def upload_path(instance, filname):
     return '/'.join(['img', str(instance.created_at), filname])
@@ -53,7 +52,7 @@ class Product(models.Model):
     addresses = models.ManyToManyField(
         Address, blank=False, related_name="products")
     created_at = models.DateField(default=datetime.now)
-    viewd_at = models.DateField(default=datetime.now,editable=True)
+    viewd_at = models.DateTimeField(default=datetime.now,editable=True)
     numberOfViews = models.IntegerField(default=0)
 
     def __str__(self):

@@ -10,6 +10,10 @@ from .serializers import *
 
 from .models import *
 
+from rest_framework.response import Response
+
+from rest_framework import generics
+
 
 class SubCategoryViewSet(viewsets.ModelViewSet):
     queryset = SubCategory.objects.all().order_by('name')
@@ -33,8 +37,38 @@ class ProductViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return self.request.user.products.all().order_by('id')
 
-    def perform_create(self, serializer):
-        serializer.save(seller=self.request.user)
+    def post(self, request, *args, **kwargs):
+
+        # data['seller_data']=self.request.user
+        kwargs["seller_data"]=self.request.user
+        serializer = self.get_serializer(data=request.data)
+        #serializer.context['seller'] = self.request.user
+        serializer.is_valid(raise_exception=True)
+
+        product = serializer.save()
+        return Response({
+            "product": ShowProductSerializer(product, context=self.get_serializer_context()).data
+        })
+
+    def get_serializer(self, *args, **kwargs):
+        """
+        Return the serializer instance that should be used for validating and
+        deserializing input, and for serializing output.
+        """
+        serializer_class = self.get_serializer_class()
+        kwargs['context'] = self.get_serializer_context()
+        return serializer_class(*args, **kwargs)    
+
+    def get_serializer_context(self):
+        """
+        Extra context provided to the serializer class.
+        """
+        return {
+            'request': self.request,
+            'format': self.format_kwarg,
+            'view': self,
+            'seller_data': self.request.user
+        }
 
 
 class ShowProductViewSet(viewsets.ModelViewSet):
@@ -44,7 +78,7 @@ class ShowProductViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        
+
         # return (user.groups)
         groups = user.groups.all().order_by('id')
         for group_data in groups:

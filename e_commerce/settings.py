@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'knox',
     'corsheaders',
+    'django_private_chat',
 ]
 
 REST_FRAMEWORK = {
@@ -142,3 +143,8 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+
+CHAT_WS_SERVER_HOST = '127.0.0.1'
+CHAT_WS_SERVER_PORT = 5002
+CHAT_WS_SERVER_PROTOCOL = 'ws'

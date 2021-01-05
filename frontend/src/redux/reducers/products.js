@@ -11,6 +11,11 @@ export default function productReducer (state = initialState, action) {
         ...state,
         products: action.payload,
       };
+    case actions.GET_SUBCAT:
+        return {
+          ...state,
+          subCategories: action.payload,
+        };
     case actions.DEL_PRODUCT:
       return {
         ...state,

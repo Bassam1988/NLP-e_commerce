@@ -142,9 +142,10 @@ function Header() {
                 </div> 
                 <div className="navbar-collapse collapse">
                     <ul className="nav navbar-nav">
-                        <li className="active"><a href="index.html">Home</a></li>
+                        <li className="active"><Link to="dashboard">Home</Link></li>
                         <li><a href="shop.html">Shop page</a></li>
-                        <li><a href="single-product.html">Single product</a></li>
+                        {auth.user && auth.user.groups[0]!=6 ? (<li><Link to="AddProduct">Add product</Link></li>):("")}
+                        
                         <li><a href="cart.html">Cart</a></li>
                         <li><a href="checkout.html">Checkout</a></li>
                         <li><a href="#">Category</a></li>

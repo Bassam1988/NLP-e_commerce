@@ -3,8 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import * as _ from "lodash";
 
-
-import { getProducts, delProduct } from "../../redux/actions/productsActions";
+import { getProducts, delProduct, getSubCategories } from "../../redux/actions/productsActions";
 
 const Image = {
   flex: 1,
@@ -23,6 +22,7 @@ function Home() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getProducts());
+    dispatch(getSubCategories());
   }, []);
   let loopIndex = 3;
   return (
@@ -182,7 +182,7 @@ function Home() {
           </div>
         </div>
       </div>
-      <div className="maincontent-area">
+      <div className="single-product-area">
         <div className="zigzag-bottom"></div>
 
         <div className="container">
@@ -190,55 +190,59 @@ function Home() {
             <div className="col-md-12">
               <div className="latest-product">
                 <h2 className="section-title">Latest Products</h2>
-                <div className="product-carousel">
+                <div className="row">
                   {products ? (
                     products.map((product) => (
-                      <div className="single-product" key={product.id}>
-                        <div className="product-f-image">
-                          <img src={product.img} alt="" style={Image}></img>
-                          <div className="product-hover">
-                            {user.groups == [5] ? (
-                              <a
-                                href=""
-                                onClick={() => dispatch(delProduct(product.id))}
-                                className="add-to-cart-link"
-                              >
-                                <i className="fa fa-shopping-cart"></i> Delete
-                              </a>
-                            ) : (
-                              ""
-                            )}
+                      <div className="col-md-3 col-sm-6" key={product.id}>
+                        <div className="single-product">
+                          <div className="product-f-image">
+                            <img src={product.img} alt="" ></img>
+                            <div className="product-hover">
+                              {user.groups != [6] ? (
+                                <a
+                                  href=""
+                                  onClick={() =>
+                                    dispatch(delProduct(product.id))
+                                  }
+                                  className="add-to-cart-link"
+                                >
+                                  <i className="fa fa-shopping-cart"></i> Delete
+                                </a>
+                              ) : (
+                                ""
+                              )}
 
+                              <Link
+                                to={{
+                                  pathname: "/viewProduct/",
+                                  state: { product1: product },
+                                }}
+                                className="view-details-link"
+                              >
+                                <i className="fa fa-link"></i> See details
+                              </Link>
+                            </div>
+                          </div>
+
+                          <h2>
                             <Link
                               to={{
                                 pathname: "/viewProduct/",
                                 state: { product1: product },
                               }}
-                              className="view-details-link"
                             >
-                              <i className="fa fa-link"></i> See details
+                              {product.name}
                             </Link>
+                          </h2>
+
+                          <div className="product-carousel-price">
+                            <ins>{product.price}</ins>{" "}
+                            {product.old_price != 0.0 ? (
+                              <del>{product.old_price}</del>
+                            ) : (
+                              ""
+                            )}
                           </div>
-                        </div>
-
-                        <h2>
-                          <Link
-                            to={{
-                              pathname: "/viewProduct/",
-                              state: { product1: product },
-                            }}
-                          >
-                            {product.name}
-                          </Link>
-                        </h2>
-
-                        <div className="product-carousel-price">
-                          <ins>{product.price}</ins>{" "}
-                          {product.old_price != 0.0 ? (
-                            <del>{product.old_price}</del>
-                          ) : (
-                            ""
-                          )}
                         </div>
                       </div>
                     ))
